@@ -31,9 +31,10 @@ def recieve():
 
     # print is just on server-side other clients don't see it
     print(f"NICK: Nickname of client is {nickname}")
-    broadcast(f"{nickname} has connected".encode('utf-8'))
-    client.send("Connected to the server successfully".encode('utf-8'))
+    broadcast(f"{nickname} has connected\n".encode('utf-8'))
+    client.send("Connected to the server successfully\n".encode('utf-8'))
 
+    # one thread each for a client that connects
     thread = threading.Thread(target=handle, args=(client,))
     thread.start()
 
@@ -47,6 +48,7 @@ def handle(client):
       index = clients.index(client)
       clients.remove(client)
       client.close()
+      broadcast(f"{nicknames[index]} has disconnected\n".encode('utf-8'))      
       nicknames.remove(nicknames[index])
       break
 
